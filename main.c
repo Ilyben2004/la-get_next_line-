@@ -2,35 +2,17 @@
 #include <fcntl.h>
 #include <stdio.h>
 
+
 int main(void)
 {
+    
+    char *c = NULL;
     int fd = open("test.txt", O_RDONLY);
-    if (fd == -1)
+    while (c = get_next_line(fd))
     {
-        perror("Error opening file");
-        return 1;
+        printf("%s",c);
+        free(c);
     }
-
-    char *line = get_next_line(fd);
-    printf("%s",line);
-    free(line);
-    line = get_next_line(fd);
-    printf("%s",line);
-    free(line);
-    line = get_next_line(fd);
-    printf("%s",line);
-    free(line);
-    line = get_next_line(fd);
-    printf("%s",line);
-    free(line);
-    line = get_next_line(fd);
-    printf("%s",line);
-    free(line);
-    line = get_next_line(fd);
-    printf("%s",line);
-    free(line);
-    line = get_next_line(fd);
-    printf("%s",line);
-    free(line);
-    return 0;
+    
+    
 }

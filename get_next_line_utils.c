@@ -1,96 +1,81 @@
 #include "get_next_line.h"
 
 
-char	*ft_strchr(const char *s, int c)
+char *extract_new_line(char *buffer, char *reminder)
 {
-	size_t			i;
-	unsigned char	cc;
+    char *new_line_address;
+    char *extracted_line;
+    int i;
+    int new_line_size;
 
-    if(!s)
-        return (NULL);
-
-	cc = c;
-	i = 0;
-
-	while (s[i])
-	{
-		if (s[i] == cc)
-			return ((char *)s + i);
-		i++;
-	}
-	return (NULL);
+    new_line_address = ft_strchr(buffer, '\n');
+    if (new_line_address)
+    {
+        new_line_size = new_line_address - buffer + 1;
+        extracted_line = calloc(new_line_size + 1, 1);
+        if (!extracted_line)
+            return (NULL);
+        for (i = 0; i < new_line_size; i++)
+            extracted_line[i] = buffer[i];
+        extracted_line[i] = '\0';
+        if (*(new_line_address + 1))
+            ft_strlcpy(reminder, new_line_address + 1);
+        free(buffer);
+        return (extracted_line);
+    }
+    return (buffer);
 }
 
-int ft_strlen(char * buffer)
+void *make_it_bigger(char **buffer, int i)
 {
-    int i;
-    
-    i = 0;
-    while (buffer[i])
-    {
+    char *buffer_bigger;
+    int j;
+
+    buffer_bigger = calloc(BUFFER_SIZE * i + 1, 1);
+    if (!buffer_bigger)
+        return (NULL);
+    for (j = 0; (*buffer)[j]; j++)
+        buffer_bigger[j] = (*buffer)[j];
+    free(*buffer);
+    *buffer = buffer_bigger;
+    return (*buffer);
+}
+
+int ft_strlen(char *buffer)
+{
+    int i = 0;
+
+    while (buffer[i] && buffer[i] != '\n')
         i++;
-        if (buffer[i] == '\n')
-        {
-            i++;
-            break;
-        }
-    }
+    if (buffer[i] == '\n')
+        i++;
     return (i);
 }
 
-char * extract_new_line(char * buffer , char *reminder )
+char *ft_strchr(const char *s, int c)
 {
-    char * new_line_adress;
-    char * extracted_line;
-    int i;
-    int new_line_size;
-    
-    i = -1;
-    new_line_adress = ft_strchr(buffer ,'\n');
-    new_line_size = ft_strlen (buffer);
-   
-    if(new_line_adress)
+    if (!s)
+        return (NULL);
+    while (*s)
     {
-        extracted_line = malloc (new_line_size + 1);
-        if(*(new_line_adress + 1))
-            ft_strlcpy(reminder , new_line_adress + 1);
-        while (++i < new_line_size)
-            extracted_line[i] = buffer[i];
-        extracted_line[i] = 0;         
+        if (*s == (char)c)
+            return ((char *)s);
+        s++;
     }
-    else
-        return(buffer);
-    free(buffer);
-    return extracted_line;
+    return (NULL);
 }
 
-void make_it_bigger(char ** buffer ,int i)
+int ft_strlcpy(char *dst, const char *src)
 {
-    char *buffer_bigere;
-    int j;
+    int i = 0;
 
-    j = -1;
-    buffer_bigere = malloc(BUFFER_SIZE * i );
-   
-    while(buffer[++j])
+    if (!dst || !src)
+        return (0);
+    while (src[i])
     {
-        buffer_bigere[j] = buffer[0][j];
+        dst[i] = src[i];
+        i++;
     }
-    ft_strlcpy(buffer_bigere,*buffer);
-    free(*buffer);
-    *buffer = buffer_bigere;
-}
-
-
-int  ft_strlcpy(char *dst, const char *src)
-{
-        int  i;
-
-        i = 0;
-        while (src[i] )
-        {
-                dst[i] = src[i];
-                i++;
-        }
-       return (1);
+    dst[i] = '\0';
+    return (i);
 }

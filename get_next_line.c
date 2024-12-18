@@ -1,36 +1,60 @@
 #include "get_next_line.h"
 
-char * get_next_line(int fd)
+void helper_func()
 {
-    static char reminder[BUFFER_SIZE];
-    char *buffer;
-    int read_ret;
-    char *line;
-    int i;
-    int count_ret;
-
-    count_ret = 0;
-
-    i = 2;
-    buffer = malloc (BUFFER_SIZE);
-    if (reminder[0] == 0)
+    if (!buffer)
+        return (NULL);
+    if (reminder[0] != 0)
     {
-        read_ret = read(fd,buffer,BUFFER_SIZE);
-        count_ret = read_ret;
+        count_ret = ft_strlcpy(buffer, reminder);
+        reminder[0] = 0;
     }
     else
     {
-        ft_strlcpy(buffer,reminder);
+        read_ret = read(fd, buffer, BUFFER_SIZE);
+        if (read_ret <= 0) 
+             return(free(buffer),NULL);
+        count_ret = read_ret;
+    }
+
+}
+
+char *get_next_line(int fd)
+{
+    static char reminder[BUFFER_SIZE + 1];
+    char *buffer;
+    int read_ret;
+    int count_ret = 0;
+    int i = 2;
+
+    buffer = calloc(BUFFER_SIZE + 1, 1);
+    if (!buffer)
+        return (NULL);
+
+    if (reminder[0] != 0)
+    {
+        count_ret = ft_strlcpy(buffer, reminder);
         reminder[0] = 0;
     }
-    while(!ft_strchr(buffer, '\n') && read_ret == BUFFER_SIZE)
+    else
     {
-        make_it_bigger(&buffer , i );
-        read_ret = read(fd, buffer +count_ret,BUFFER_SIZE);
-        printf("%s\n ",buffer);
-        count_ret += read_ret;
-        if(read_ret == 0)
-            break; 
+        read_ret = read(fd, buffer, BUFFER_SIZE);
+        if (read_ret <= 0) 
+             return(free(buffer),NULL);
+        count_ret = read_ret;
     }
-    return (extract_new_line(buffer,reminder));
+
+    while (!ft_strchr(buffer, '\n') && count_ret > 0)
+    {
+        if (!make_it_bigger(&buffer, i++))
+            return(free(buffer),NULL);
+        read_ret = read(fd, buffer + count_ret, BUFFER_SIZE);
+        if (read_ret <= 0)
+            break;
+        count_ret += read_ret;
+    }
+
+    if (!*buffer)
+         return(free(buffer),NULL);
+    return (extract_new_line(buffer, reminder));
 }
