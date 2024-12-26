@@ -8,11 +8,9 @@ int main(void)
 
     char *c = NULL;
     int fd = open("test.txt", O_RDONLY);
-    while (c = get_next_line(fd))
+    c = get_next_line(fd);
+    printf("%s",c);
+    while(1)
     {
-        printf("%s",c);
-        free(c);
     }
-    
-    
 }
