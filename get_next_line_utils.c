@@ -53,13 +53,13 @@ void	*make_it_bigger(char **buffer, int i)
 	return (*buffer);
 }
 
-char	*ft_strchr(const char *s, char c)
+char	*ft_strchr(const char *s, int c)
 {
 	if (!s)
 		return (NULL);
 	while (*s)
 	{
-		if (*s == c)
+		if (*s == (char)c)
 			return ((char *)s);
 		s++;
 	}
