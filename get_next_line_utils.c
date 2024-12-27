@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_next_line_utils.c                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ibennaje <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/12/27 12:56:23 by ibennaje          #+#    #+#             */
+/*   Updated: 2024/12/27 12:56:26 by ibennaje         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "get_next_line.h"
 
 char	*extract_new_line(char *buffer, char *reminder)
@@ -11,13 +23,12 @@ char	*extract_new_line(char *buffer, char *reminder)
 	new_line_address = ft_strchr(buffer, '\n');
 	if (new_line_address)
 	{
-		new_line_size = new_line_address - buffer + 1;
+		new_line_size = new_line_address - buffer;
 		extracted_line = ft_calloc(new_line_size + 1, 1);
 		if (!extracted_line)
 			return (NULL);
 		while (++i < new_line_size)
 			extracted_line[i] = buffer[i];
-		extracted_line[i] = '\0';
 		if (*(new_line_address + 1))
 			ft_strlcpy(reminder, new_line_address + 1);
 		free(buffer);
@@ -40,18 +51,6 @@ void	*make_it_bigger(char **buffer, int i)
 	free(*buffer);
 	*buffer = buffer_bigger;
 	return (*buffer);
-}
-
-int	ft_strlen(char *buffer)
-{
-	int	i;
-
-	i = 0;
-	while (buffer[i] && buffer[i] != '\n')
-		i++;
-	if (buffer[i] == '\n')
-		i++;
-	return (i);
 }
 
 char	*ft_strchr(const char *s, int c)
@@ -81,4 +80,18 @@ int	ft_strlcpy(char *dst, const char *src)
 	}
 	dst[i] = '\0';
 	return (i);
+}
+
+void	*ft_calloc(size_t nmemb, size_t size)
+{
+	void	*array;
+	size_t	i;
+
+	array = (void *)malloc(nmemb * size);
+	if (array == NULL)
+		return (NULL);
+	i = 0;
+	while ((i < nmemb * size))
+		*((char *)array + i++) = 0;
+	return (array);
 }

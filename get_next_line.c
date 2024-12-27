@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ibennaje <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/12/27 12:52:43 by ibennaje          #+#    #+#             */
+/*   Updated: 2024/12/27 12:52:46 by ibennaje         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "get_next_line.h"
 
 void	*helper_func(char *buffer, char *reminder, int *read_values, int fd)
@@ -17,20 +29,6 @@ void	*helper_func(char *buffer, char *reminder, int *read_values, int fd)
 		read_values[1] = read_values[0];
 	}
 	return ("valid");
-}
-
-void	*ft_calloc(size_t nmemb, size_t size)
-{
-	void	*array;
-	size_t	i;
-
-	array = (void *)malloc(nmemb * size);
-	if (array == NULL)
-		return (NULL);
-	i = 0;
-	while ((i < nmemb * size))
-		*((char *)array + i++) = 0;
-	return (array);
 }
 
 char	*get_next_line(int fd)
