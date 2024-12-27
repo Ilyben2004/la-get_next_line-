@@ -23,7 +23,7 @@ char	*extract_new_line(char *buffer, char *reminder)
 	new_line_address = ft_strchr(buffer, '\n');
 	if (new_line_address)
 	{
-		new_line_size = new_line_address - buffer;
+		new_line_size = new_line_address - buffer + 1;
 		extracted_line = ft_calloc(new_line_size + 1, 1);
 		if (!extracted_line)
 			return (NULL);
@@ -43,7 +43,7 @@ void	*make_it_bigger(char **buffer, int i)
 	int		j;
 
 	j = -1;
-	buffer_bigger = ft_calloc(BUFFER_SIZE * i + 1, 1);
+	buffer_bigger = ft_calloc((size_t)(BUFFER_SIZE) * i + 1, 1);
 	if (!buffer_bigger)
 		return (NULL);
 	while ((*buffer)[++j])
@@ -53,13 +53,13 @@ void	*make_it_bigger(char **buffer, int i)
 	return (*buffer);
 }
 
-char	*ft_strchr(const char *s, int c)
+char	*ft_strchr(const char *s, char c)
 {
 	if (!s)
 		return (NULL);
 	while (*s)
 	{
-		if (*s == (char)c)
+		if (*s == c)
 			return ((char *)s);
 		s++;
 	}
@@ -84,14 +84,18 @@ int	ft_strlcpy(char *dst, const char *src)
 
 void	*ft_calloc(size_t nmemb, size_t size)
 {
-	void	*array;
+	void	*ret;
+	size_t	totalsize;
 	size_t	i;
 
-	array = (void *)malloc(nmemb * size);
-	if (array == NULL)
-		return (NULL);
 	i = 0;
-	while ((i < nmemb * size))
-		*((char *)array + i++) = 0;
-	return (array);
+	if (nmemb != 0 && SIZE_MAX / nmemb < size)
+		return (NULL);
+	totalsize = nmemb * size;
+	ret = malloc(totalsize);
+	if (!ret)
+		return (NULL);
+	while ((i < totalsize))
+		*((char *)ret + i++) = 0;
+	return (ret);
 }

@@ -40,7 +40,7 @@ char	*get_next_line(int fd)
 
 	read_values[1] = 0;
 	i = 2;
-	buffer = ft_calloc(BUFFER_SIZE + 1, 1);
+	buffer = ft_calloc((size_t)(BUFFER_SIZE)+ 1, 1);
 	if (!helper_func(buffer, reminder, read_values, fd))
 		return (NULL);
 	while (!ft_strchr(buffer, '\n') && read_values[1] > 0)
